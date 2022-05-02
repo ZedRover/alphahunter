@@ -10,6 +10,7 @@ Description: Asynchronous driven quantitative trading framework
 """
 
 import sys
+sys.path.append('/home/zed/workspace/crypto/alphahunter/')
 import asyncio
 
 from quant import const

@@ -45,7 +45,7 @@ from quant.trader import Trader
 
 __all__ = ("OKExRestAPI", "OKExTrader", )
 
-
+  
 class OKExRestAPI:
     """ OKEx REST API client.
 
@@ -70,7 +70,7 @@ class OKExRestAPI:
             success: Success results, otherwise it's None.
             error: Error information, otherwise it's None.
         """
-        result, error = await self.request("GET", "/api/spot/v3/instruments")
+        result, error = await self.request("GET", "/api/spot/v5/instruments")
         return result, error
 
     async def get_account_balance(self):
@@ -80,7 +80,7 @@ class OKExRestAPI:
             success: Success results, otherwise it's None.
             error: Error information, otherwise it's None.
         """
-        result, error = await self.request("GET", "/api/spot/v3/accounts", auth=True)
+        result, error = await self.request("GET", "/api/spot/v5/accounts", auth=True)
         return result, error
 
     async def create_order(self, action, symbol, price, quantity, order_type=ORDER_TYPE_LIMIT):
@@ -119,7 +119,7 @@ class OKExRestAPI:
         else:
             logger.error("order_type error! order_type:", order_type, caller=self)
             return None
-        result, error = await self.request("POST", "/api/spot/v3/orders", body=info, auth=True)
+        result, error = await self.request("POST", "/api/spot/v5/orders", body=info, auth=True)
         return result, error
 
     async def revoke_order(self, symbol, order_no):
@@ -135,7 +135,7 @@ class OKExRestAPI:
         body = {
             "instrument_id": symbol
         }
-        uri = "/api/spot/v3/cancel_orders/{order_no}".format(order_no=order_no)
+        uri = "/api/spot/v5/cancel_orders/{order_no}".format(order_no=order_no)
         result, error = await self.request("POST", uri, body=body, auth=True)
         if error:
             return order_no, error
@@ -163,7 +163,7 @@ class OKExRestAPI:
                 "order_ids": order_nos[:10]
             }
         ]
-        result, error = await self.request("POST", "/api/spot/v3/cancel_batch_orders", body=body, auth=True)
+        result, error = await self.request("POST", "/api/spot/v5/cancel_batch_orders", body=body, auth=True)
         return result, error
 
     async def get_open_orders(self, symbol, limit=100):
@@ -177,7 +177,7 @@ class OKExRestAPI:
             success: Success results, otherwise it's None.
             error: Error information, otherwise it's None.
         """
-        uri = "/api/spot/v3/orders_pending"
+        uri = "/api/spot/v5/orders_pending"
         params = {
             "instrument_id": symbol,
             "limit": limit
@@ -198,7 +198,7 @@ class OKExRestAPI:
         params = {
             "instrument_id": symbol
         }
-        uri = "/api/spot/v3/orders/{order_no}".format(order_no=order_no)
+        uri = "/api/spot/v5/orders/{order_no}".format(order_no=order_no)
         result, error = await self.request("GET", uri, params=params, auth=True)
         return result, error
 
@@ -236,6 +236,7 @@ class OKExRestAPI:
 
             if not headers:
                 headers = {}
+            headers["x-simulated-trading"] = 1
             headers["Content-Type"] = "application/json"
             headers["OK-ACCESS-KEY"] = self._access_key.encode().decode()
             headers["OK-ACCESS-SIGN"] = sign.decode()
@@ -276,14 +277,15 @@ class OKExTrader(Websocket, ExchangeGateway):
             SingleTask.run(self.cb.on_state_update_callback, state)
             return
 
-        self._host = "https://www.okex.com"
-        self._wss = "wss://real.okex.com:8443"
+        self._host = "https://www.okx.com"
+        self._wss = "wss://wspap.okex.com:8443/ws/v5/private?brokerId=9999"
 
         self._order_channel = []
         for sym in self._symbols:
             self._order_channel.append("spot/order:{symbol}".format(symbol=sym))
 
-        url = self._wss + "/ws/v3"
+        # url = self._wss + "/ws/v5"
+        url = self._wss
         super(OKExTrader, self).__init__(url, send_hb_interval=5, **kwargs)
         self.heartbeat_msg = "ping"
         
@@ -431,6 +433,7 @@ class OKExTrader(Websocket, ExchangeGateway):
             position: Position if successfully, otherwise it's None.
             error: Error information, otherwise it's None.
         """
+        return None
         raise NotImplementedError
 
     async def get_symbol_info(self, symbol):
@@ -898,8 +901,8 @@ class OKExMarket(Websocket):
     def __init__(self, **kwargs):
         self._platform = kwargs["platform"]
         self._symbols = kwargs["symbols"]
-        self._wss = "wss://real.okex.com:8443"
-        url = self._wss + "/ws/v3"
+        self._wss = "wss://wspap.okx.com:8443"
+        url = self._wss + "/ws/v5"+"/public?brokerId=9999"
         super(OKExMarket, self).__init__(url, send_hb_interval=5, **kwargs)
         self.heartbeat_msg = "ping"
         self._orderbook_length = 20

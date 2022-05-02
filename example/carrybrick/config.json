@@ -8,25 +8,18 @@
     "LOG": {
         "console": false,
         "level": "WARN",
-        "path": "C:/Users/Administrator/Desktop/log",
+        "path": "/home/zed/workspace/crypto/alphahunter/log",
         "name": "quant.log",
         "clear": false,
         "backup_count": 5
     },
-    "PROXY": "http://127.0.0.1:6666",
+    "PROXY": "",
     "PLATFORMS": [
-        {
-            "platform": "huobi",
-            "account": "test",
-            "access_key": "xxxxxxxxxxxx",
-            "secret_key": "xxxxxxxxxxxx",
-            "symbols": ["ETH/USDT"]
-        },
         {
             "platform": "okex",
             "account": "test",
-            "access_key": "xxxxxxxxxxxx",
-            "secret_key": "xxxxxxxxxxxx",
+            "access_key": "d679dda8-d8a8-43d3-b707-ab25d75a0f20",
+            "secret_key": "6746ED8B2A5C73359C48D7B754E7E7C4",
             "passphrase": "mytest",
             "symbols": ["ETH/USDT"]
         }

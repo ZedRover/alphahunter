@@ -5,14 +5,14 @@
         "username": "guest",
         "password": "guest"
     },
-    "PROXY": "http://127.0.0.1:6666",
+    "PROXY": "http://127.0.0.1:7890",
     "PLATFORMS": [
         {
             "platform": "okex",
             "account": "test",
-            "access_key": "xxxxxxxxxxxx",
-            "secret_key": "xxxxxxxxxxxx",
-            "passphrase": "mytest",
+            "access_key": "d679dda8-d8a8-43d3-b707-ab25d75a0f20",
+            "secret_key": "6746ED8B2A5C73359C48D7B754E7E7C4",
+            "passphrase": "Aa123456",
             "symbols": ["ETH/USDT","BTC/USDT"]
         }
     ],

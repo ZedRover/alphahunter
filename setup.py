@@ -10,6 +10,7 @@ setup(
         "quant",
         "quant.utils",
         "quant.platform",
+        "quant.interface"
     ],
     description="Asynchronous driven quantitative trading framework.",
     url="https://github.com/phonegapx/alphahunter",
@@ -19,10 +20,5 @@ setup(
     keywords=[
         "alphahunter", "quant", "framework", "async", "asynchronous", "digiccy", "digital", "currency",
         "marketmaker", "binance", "okex", "huobi", "bitmex", "ftx"
-    ],
-    install_requires=[
-        "aiohttp==3.2.1",
-        "aioamqp==0.13.0",
-        "motor==2.0.0"
     ],
 )
